@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector('#btn-load').addEventListener('click', function(e) {
+    document.querySelector('.file-input form').addEventListener('submit', function(e) {
         e.preventDefault();
+    }, false);
+    document.querySelector('#input-pdf').addEventListener('focus', function(e) {
+        e.target.select();
+    });
+    document.querySelector('#btn-load').addEventListener('click', function(e) {
         displayPDF(getPDFUrl());
     }, false);
 });
