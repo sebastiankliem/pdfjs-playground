@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+    padding: 1rem;
+    font-family: sans-serif;
+}
+
+.file-input input {
+    width: 30rem;
+}
