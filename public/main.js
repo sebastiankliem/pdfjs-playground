@@ -21,6 +21,25 @@ function setupPDFjs() {
 function displayPDF(url) {
     console.log('display pdf');
     PDFJS.getDocument(url).then(function(pdf) {
-        console.log(pdf);
+        for(let i = 1; i <= pdf.numPages; i++) {
+            pdf.getPage(i).then(page => renderPage(page));
+        }
     });
+}
+
+function renderPage(page) {
+    var scale = 1.5;
+    var viewport = page.getViewport(scale);
+
+    var canvas = document.createElement('canvas');
+    document.querySelector('#pdf-viewer').appendChild(canvas);
+    var context = canvas.getContext('2d');
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    var renderContext = {
+        canvasContext: context,
+        viewport: viewport
+    };
+    page.render(renderContext);
 }

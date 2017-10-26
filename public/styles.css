@@ -7,3 +7,8 @@ body {
 .file-input input {
     width: 30rem;
 }
+
+#pdf-viewer canvas {
+    margin-top: 1rem;
+    border: 1px solid lightgray;
+}
