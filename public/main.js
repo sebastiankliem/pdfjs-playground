@@ -20,6 +20,11 @@ function setupPDFjs() {
 
 function displayPDF(url) {
     console.log('display pdf');
+    var viewer = document.querySelector('#pdf-viewer');
+    while (viewer.firstChild) {
+      viewer.removeChild(viewer.firstChild);
+    }
+    
     PDFJS.getDocument(url).then(function(pdf) {
         for(let i = 1; i <= pdf.numPages; i++) {
             pdf.getPage(i).then(page => renderPage(page));
