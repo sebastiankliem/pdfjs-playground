@@ -8,6 +8,6 @@ body {
     width: 30rem;
 }
 
-#pdf-viewer canvas {
+#pdf-viewer .page {
     border: 1px solid lightgray;
 }
