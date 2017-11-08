@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelector('#btn-load').addEventListener('click', function(e) {
         displayPDF(getPDFUrl());
     }, false);
+
+    setupPDFjs();
 });
 
 function getPDFUrl() {
@@ -20,19 +22,40 @@ function setupPDFjs() {
 
 function displayPDF(url) {
     console.log('display pdf');
-    var viewer = document.querySelector('#pdf-viewer');
-    while (viewer.firstChild) {
-      viewer.removeChild(viewer.firstChild);
-    }
+    var container = document.querySelector('#pdf-viewer');
+    var pdfLinkService = new PDFJS.PDFLinkService();
     
-    PDFJS.getDocument(url).then(function(pdf) {
-        for(let i = 1; i <= pdf.numPages; i++) {
-            pdf.getPage(i).then(page => renderPage(i, page, viewer));
-        }
+    var pdfViewer = new PDFJS.PDFViewer({
+      container: container,
+      linkService: pdfLinkService,
+    });
+    pdfLinkService.setViewer(pdfViewer);
+    
+    // (Optionally) enable find controller.
+    var pdfFindController = new PDFJS.PDFFindController({
+      pdfViewer: pdfViewer
+    });
+    pdfViewer.setFindController(pdfFindController);
+    
+    container.addEventListener('pagesinit', function () {
+      // We can use pdfViewer now, e.g. let's change default scale.
+      pdfViewer.currentScaleValue = 1;
+    });
+    
+    // Loading document.
+    PDFJS.getDocument(url).then(function (pdfDocument) {
+      // Document loaded, specifying document for the viewer and
+      // the (optional) linkService.
+      pdfViewer.setDocument(pdfDocument);
+    
+      pdfLinkService.setDocument(pdfDocument, null);
     });
 }
 
 function renderPage(pageNumber, page, viewer) {
+    console.log(page.getAnnotations());
+    console.log(page);
+    
     var scale = 1;
     var viewport = page.getViewport(scale);
 
